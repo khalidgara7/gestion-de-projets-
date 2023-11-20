@@ -1,4 +1,4 @@
-
+-- la supression de la base de donnée.
 drop database if EXISTS gestion_database;
 -- creation de base de donnée
 create database if not exists gestion_database;
@@ -47,10 +47,11 @@ create table if not exists ressource(id_ressource int primary key AUTO_INCREMENT
                                     FOREIGN KEY (id_squad) REFERENCES squads(id_squad),
                                     FOREIGN key (id_projet) REFERENCES projet(id_projet));
 
--- insertion des donnée / En tant qu'administrateur système, 
+ 
+-- / En tant qu'administrateur système, 
 -- je veux créer de nouveaux utilisateurs dans la base de données 
 -- pour maintenir une liste actualisée des membres de l'équipe
-
+-- insertion des donnée a la table utilisateur.
  insert into utilisateur (nom,email) values('khalid','khalidgara@gmail.com'),
                                             ('mouad','mouadfifel@gmail.com'),
                                             ('youssef','youssefmati@gmail.com'),
@@ -61,11 +62,12 @@ create table if not exists ressource(id_ressource int primary key AUTO_INCREMENT
 -- En tant que chef de projet, je veux créer un nouveau projet en fournissant
 --  des détails tels que le nom, la description et les dates, 
 --  pour définir clairement les paramètres de chaque projet.
+-- insertion des donnée sur la table projet.
 insert into projet VALUES(null,'travel projet','Travel is the movement of people between distant geographical locations. Travel can be done by foot, bicycle, automobile,','2023-11-15','2023-12-15'),
                           (null,'formation sertifier','Une formation certifiante est une formation reconnue permettant de décrocher une certification officielle.','2023-11-15','2023-12-15'),
                           (null,'creation d\'entreprise',' Celle-ci figure automatiquement dans la liste du RNCP ','2023-11-15','2023-12-15');
                           
--- insertion des donnée de projet 
+-- insertion des donnée sur la table squads 
 -- En tant que leader de squad, je souhaite créer un nouveau squad,
 -- spécifiant le nom et ajoutant des membres à ce squad, 
 -- pour former rapidement des équipes dédiées à des projets spécifiques.
@@ -75,25 +77,32 @@ INSERT into squads(id_projet,id_utilisateur) VALUES ('2','3'),
 
 
 -- En tant que membre de squad, je veux voir la liste des projets pour 
--- lesquels mon squad est responsable pour comprendre les projets actuels et suivre les responsabilités.                          
+-- lesquels mon squad est responsable pour comprendre les projets actuels et suivre les responsabilités.   
+-- la requet pour lister tous les donnée on table projet a partitr de utilise la relation entre les table squads et projet et utilisateur.                      
 select p.id_projet, p.nom, p.description, p.date_debut, p.date_fin from utilisateur u 
 INNER JOIN squads s ON u.id_utilisateur = s.id_squad
 INNER JOIN projet p ON p.id_projet = s.id_projet 
 where u.id_utilisateur = 1;
 
--- SELECT projet.* from projet, squads where projet.id_projet = squads.id_projet and squads.id_utilisateur = 2;
+-- lister tous les donnée de projet a partire de selectionnée l'utilisateur comme un responsable.
+ SELECT projet.* from projet, squads where projet.id_projet = squads.id_projet and squads.id_utilisateur = 2;
 
 -- En tant que responsable des catégories et sous-catégories,
 -- je souhaite créer de nouvelles catégories et sous-catégories
 -- pour classer les ressources et organiser efficacement la base de données.
 
+-- insertion des donnée a la table category et subcategory
 insert into category VALUES(null,'santé'),(null,'e-commerce');
 insert into subcategory VALUES(null,'pharmacie',1),(null,'shipping',2);
+
+-- insertion des valeurs a la table ressource.
 
 -- En tant que responsable des ressources, je veux ajouter une nouvelle ressource en spécifiant son nom,
 -- sa catégorie, sa sous-catégorie et son association éventuelle à un squad ou à un projet,
 -- pour gérer efficacement les ressources disponibles.
 insert into ressource VALUES(null,'minister santé',1,1,2,2),(null,'ali-baba',1,1,1,2); 
+
+-- la modification de donnée sur les chaque table 
 
 -- En tant que développeur Fullstack, je veux pouvoir mettre à jour les détails d'un utilisateur,
 -- d'un squad, d'un projet ou d'une ressource existante pour ajuster les informations en fonction des évolutions.
@@ -102,8 +111,9 @@ UPDATE squads set id_utilisateur = 4 where id_squad = 1;
 update projet set date_fin = '2023-12-20' where id_projet = 2;
 update ressource set nom = 'gotntag' where id_ressource = 1;
 
-
+-- liste les donnée de la table utilisateur
 select * from utilisateur;
+-- la supression des donnée spicifique sur la table utilisateur 
 DELETE from utilisateur where id_utilisateur >4;
 
 
